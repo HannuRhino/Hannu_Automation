@@ -1,9 +1,0 @@
-bin/
-obj/
-.vs/
-.gitnexus/
-.understand-anything/
-*.user
-*.suo
-.DS_Store
-Thumbs.db
