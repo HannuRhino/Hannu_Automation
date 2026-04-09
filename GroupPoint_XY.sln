@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupPoint_XY", "GroupPoint_XY.csproj", "{A2C5DE21-3636-440D-A40D-B898906D8231}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2C5DE21-3636-440D-A40D-B898906D8231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2C5DE21-3636-440D-A40D-B898906D8231}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2C5DE21-3636-440D-A40D-B898906D8231}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2C5DE21-3636-440D-A40D-B898906D8231}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A6B28C2-2D72-44A6-A23C-07B4D1D0241E}
+	EndGlobalSection
+EndGlobal
