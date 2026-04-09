@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 
 namespace GroupPoint_XY
 {
-    public class GroupPoint_XYInfo : GH_AssemblyInfo
+    public class Hannu_Info : GH_AssemblyInfo
     {
         public override string Name => "Hannu Automation";
 
