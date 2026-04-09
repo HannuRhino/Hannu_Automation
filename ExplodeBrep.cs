@@ -152,7 +152,7 @@ namespace BrepNavigationComponents
                 // Lines_X is long edge
                 if (linesX.Count > 0)
                 {
-                    vectorLong = linesX[0].To - linesX[0].From;  // Vector FROM->TO (có độ dài)
+                    vectorLong = linesX[0].To - linesX[0].From;
                 }
                 else
                 {
@@ -161,7 +161,7 @@ namespace BrepNavigationComponents
 
                 if (linesY.Count > 0)
                 {
-                    vectorShort = linesY[0].To - linesY[0].From;  // Vector FROM->TO (có độ dài)
+                    vectorShort = linesY[0].To - linesY[0].From;
                 }
                 else
                 {
@@ -176,7 +176,7 @@ namespace BrepNavigationComponents
                 // Lines_Y is long edge
                 if (linesY.Count > 0)
                 {
-                    vectorLong = linesY[0].To - linesY[0].From;  // Vector FROM->TO (có độ dài)
+                    vectorLong = linesY[0].To - linesY[0].From;
                 }
                 else
                 {
@@ -185,7 +185,7 @@ namespace BrepNavigationComponents
 
                 if (linesX.Count > 0)
                 {
-                    vectorShort = linesX[0].To - linesX[0].From;  // Vector FROM->TO (có độ dài)
+                    vectorShort = linesX[0].To - linesX[0].From;
                 }
                 else
                 {

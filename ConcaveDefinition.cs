@@ -150,13 +150,13 @@ namespace SlicingTools
                     // Calculate actual distance
                     if (useHMax)
                     {
-                        actualDistance = h_max - 0.1;  // ← SỬA: Trừ tolerance
+                        actualDistance = h_max - 0.1;
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Remark,
                             $"Slicing at h_max - tolerance = {actualDistance:F3} (h_max={h_max:F3})");
                     }
                     else if (useHMin)
                     {
-                        actualDistance = h_min + 0.1;  // ← SỬA: Cộng tolerance
+                        actualDistance = h_min + 0.1;
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Remark,
                             $"Slicing at h_min + tolerance = {actualDistance:F3} (h_min={h_min:F3})");
                     }

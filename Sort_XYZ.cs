@@ -430,9 +430,6 @@ namespace YourNamespace
                     }
                 }
 
-                // ── ROUND TRƯỚC, ADD SAU ──────────────────────────────
-                // Làm tròn centroid 2 chữ số thập phân trước khi add vào list.
-                // Tất cả logic sort bên dưới sẽ dùng giá trị đã round này.
                 if (centroid.IsValid)
                 {
                     centroid = new Point3d(
@@ -443,7 +440,6 @@ namespace YourNamespace
 
                     centroids.Add(centroid);
 
-                    // Round value nếu nó là Point3d
                     object val = values[i];
                     if (val is Point3d pt)
                     {
@@ -690,7 +686,6 @@ namespace YourNamespace
             }
 
             // Sort pairs by specified axis
-            // ThenBy(OriginalIndex) giữ đúng thứ tự input khi giá trị trục bằng nhau
             List<CentroidValuePair> sortedPairs;
 
             switch (axis)

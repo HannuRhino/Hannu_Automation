@@ -119,7 +119,6 @@ namespace SlicingTools
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Remark,
                         $"Created mesh with {unifiedMesh.Vertices.Count} vertices");
 
-                    // Step 2: Get shadow outlines (chiếu vuông góc theo vector pháp tuyến của plane)
                     Polyline[] outlines = unifiedMesh.GetOutlines(slicePlane);
 
                     if (outlines == null || outlines.Length == 0)

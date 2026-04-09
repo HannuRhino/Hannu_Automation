@@ -13,24 +13,14 @@ namespace SortedLineByAxis
     /// <summary>
     /// SORT CURVES BY XYZ COMPONENT
     /// 
-    /// Phân loại và sắp xếp các đường cong (Curve) theo hướng song song với trục X, Y, Z hoặc Diagonal.
-    /// Hỗ trợ 2 chế độ sort: By Length và By Vector.
     /// 
-    /// THUẬT TOÁN:
-    /// - Sử dụng tangent vector tại điểm đầu của curve
-    /// - Tính dot product bình phương (squared) để tránh sqrt
-    /// - Chọn trục có dot product cao nhất
-    /// - Sort theo độ dài hoặc vị trí không gian
-    /// - Giữ nguyên cấu trúc path từ input sang output
     /// </summary>
     public class SortCurvesByXYZ : GH_Component
     {
         #region CONSTANTS
 
-        // Tolerance bình phương (0.999² = 0.998001)
         private const double TOLERANCE_SQ = 0.998001;
 
-        // Ngưỡng độ dài bình phương tối thiểu (1e-12)
         private const double MIN_LENGTH_SQ = 1e-12;
 
         #endregion
@@ -38,7 +28,6 @@ namespace SortedLineByAxis
         #region METADATA & CONSTRUCTOR
 
         /// <summary>
-        /// Constructor - Định nghĩa thông tin component
         /// </summary>
         public SortCurvesByXYZ()
           : base(
@@ -58,11 +47,9 @@ namespace SortedLineByAxis
         #region INPUT PARAMETERS
 
         /// <summary>
-        /// Đăng ký các tham số INPUT
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            // INPUT 1: DataTree chứa các Curve cần phân loại
             pManager.AddCurveParameter(
                 "Curves",
                 "C",
@@ -94,7 +81,6 @@ namespace SortedLineByAxis
         #region OUTPUT PARAMETERS
 
         /// <summary>
-        /// Đăng ký các tham số OUTPUT
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
@@ -109,12 +95,10 @@ namespace SortedLineByAxis
         #region MAIN EXECUTION
 
         /// <summary>
-        /// PHƯƠNG THỨC THỰC THI CHÍNH
         /// </summary>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // ═══════════════════════════════════════════════════════
-            // BƯỚC 1: LẤY INPUT
             // ═══════════════════════════════════════════════════════
 
             GH_Structure<GH_Curve> inputTree;
@@ -131,7 +115,6 @@ namespace SortedLineByAxis
             DA.GetData(2, ref byVector);
 
             // ═══════════════════════════════════════════════════════
-            // BƯỚC 2: KIỂM TRA INPUT HỢP LỆ
             // ═══════════════════════════════════════════════════════
 
             if (byLength && byVector)
@@ -144,7 +127,6 @@ namespace SortedLineByAxis
             }
 
             // ═══════════════════════════════════════════════════════
-            // BƯỚC 3: KHỞI TẠO OUTPUT TREES
             // ═══════════════════════════════════════════════════════
 
             DataTree<Curve> treeX = new DataTree<Curve>();
@@ -155,7 +137,6 @@ namespace SortedLineByAxis
             int skippedCount = 0;
 
             // ═══════════════════════════════════════════════════════
-            // BƯỚC 4: PHÂN LOẠI CURVES THEO TRỤC
             // ═══════════════════════════════════════════════════════
 
             foreach (GH_Path path in inputTree.Paths)
@@ -173,14 +154,12 @@ namespace SortedLineByAxis
 
                     Curve curve = ghCurve.Value;
 
-                    // Kiểm tra curve có hợp lệ không
                     if (!curve.IsValid || curve.GetLength() < 1e-6)
                     {
                         skippedCount++;
                         continue;
                     }
 
-                    // Lấy tangent vector tại điểm đầu của curve
                     Vector3d tangent = curve.TangentAtStart;
 
                     if (!tangent.IsValid)
@@ -189,7 +168,6 @@ namespace SortedLineByAxis
                         continue;
                     }
 
-                    // Tính độ dài bình phương của tangent
                     double dx = tangent.X;
                     double dy = tangent.Y;
                     double dz = tangent.Z;
@@ -202,14 +180,12 @@ namespace SortedLineByAxis
                         continue;
                     }
 
-                    // Tính dot product bình phương
                     double dotXSq = (dx * dx) / lengthSq;
                     double dotYSq = (dy * dy) / lengthSq;
                     double dotZSq = (dz * dz) / lengthSq;
 
                     double maxDotSq = Math.Max(dotXSq, Math.Max(dotYSq, dotZSq));
 
-                    // Phân loại
                     if (maxDotSq < TOLERANCE_SQ)
                     {
                         treeDiagonal.Add(curve, path);
@@ -230,7 +206,6 @@ namespace SortedLineByAxis
             }
 
             // ═══════════════════════════════════════════════════════
-            // BƯỚC 5: SORT THEO YÊU CẦU
             // ═══════════════════════════════════════════════════════
 
             if (byLength)
@@ -252,7 +227,6 @@ namespace SortedLineByAxis
             }
 
             // ═══════════════════════════════════════════════════════
-            // BƯỚC 6: WARNING VÀ OUTPUT
             // ═══════════════════════════════════════════════════════
 
             if (skippedCount > 0)
@@ -274,7 +248,6 @@ namespace SortedLineByAxis
         #region HELPER METHODS
 
         /// <summary>
-        /// Sort DataTree theo độ dài của Curve
         /// </summary>
         private DataTree<Curve> SortTreeByLength(DataTree<Curve> tree)
         {
@@ -285,7 +258,6 @@ namespace SortedLineByAxis
                 List<Curve> curves = tree.Branch(path);
                 if (curves == null || curves.Count == 0) continue;
 
-                // Sort theo độ dài tăng dần
                 var sortedCurves = curves.OrderBy(curve => curve.GetLength()).ToList();
 
                 foreach (Curve curve in sortedCurves)
@@ -298,7 +270,6 @@ namespace SortedLineByAxis
         }
 
         /// <summary>
-        /// Sort DataTree theo vị trí không gian (X, Y, hoặc Z)
         /// </summary>
         private DataTree<Curve> SortTreeByAxis(DataTree<Curve> tree, char axis)
         {
@@ -309,13 +280,11 @@ namespace SortedLineByAxis
                 List<Curve> curves = tree.Branch(path);
                 if (curves == null || curves.Count == 0) continue;
 
-                // Sort theo trục được chỉ định
                 List<Curve> sortedCurves;
 
                 switch (axis)
                 {
                     case 'X':
-                        // Sort theo tọa độ X (lấy giá trị nhỏ hơn của start và end)
                         sortedCurves = curves.OrderBy(curve =>
                         {
                             Point3d start = curve.PointAtStart;
@@ -325,7 +294,6 @@ namespace SortedLineByAxis
                         break;
 
                     case 'Y':
-                        // Sort theo tọa độ Y (lấy giá trị nhỏ hơn của start và end)
                         sortedCurves = curves.OrderBy(curve =>
                         {
                             Point3d start = curve.PointAtStart;
@@ -335,7 +303,6 @@ namespace SortedLineByAxis
                         break;
 
                     case 'Z':
-                        // Sort theo tọa độ Z (lấy giá trị nhỏ hơn của start và end)
                         sortedCurves = curves.OrderBy(curve =>
                         {
                             Point3d start = curve.PointAtStart;
@@ -374,7 +341,6 @@ namespace SortedLineByAxis
         }
 
         /// <summary>
-        /// Component GUID - QUAN TRỌNG: Đổi GUID mới để tránh conflict với component cũ
         /// </summary>
         public override Guid ComponentGuid
         {

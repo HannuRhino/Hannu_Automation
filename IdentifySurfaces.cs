@@ -12,8 +12,6 @@ using Rhino.Geometry;
 namespace SurfaceClassification
 {
     /// <summary>
-    /// Surface Classifier - Phân loại Inner/Outer surfaces
-    /// Version: Giữ nguyên Input/Output gốc + Fix tất cả bugs
     /// </summary>
     public class SurfaceClassifier : GH_Component
     {
@@ -31,7 +29,6 @@ namespace SurfaceClassification
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
         /// <summary>
-        /// INPUT PARAMETERS - ĐÚNG Y HỆT SCRIPT GỐC
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -69,7 +66,6 @@ namespace SurfaceClassification
         }
 
         /// <summary>
-        /// OUTPUT PARAMETERS - ĐÚNG Y HỆT SCRIPT GỐC
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
@@ -101,7 +97,6 @@ namespace SurfaceClassification
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // ═══════════════════════════════════════════════════════
-            // KHAI BÁO BIẾN - ĐÚNG Y HỆT SCRIPT GỐC
             // ═══════════════════════════════════════════════════════
 
             GH_Structure<GH_Brep> BREP = null;
@@ -119,7 +114,6 @@ namespace SurfaceClassification
             if (!DA.GetData(3, ref ExcludeVector)) return;
 
             // ═══════════════════════════════════════════════════════
-            // FIX #2: VALIDATE INPUT (tránh crash)
             // ═══════════════════════════════════════════════════════
 
             if (LongtitudeLine == null || !LongtitudeLine.IsValid)
@@ -137,7 +131,6 @@ namespace SurfaceClassification
             }
 
             // ═══════════════════════════════════════════════════════
-            // OUTPUT TREES - ĐÚNG Y HỆT SCRIPT GỐC
             // ═══════════════════════════════════════════════════════
 
             DataTree<Surface> InnerSurface = new DataTree<Surface>();
@@ -145,7 +138,6 @@ namespace SurfaceClassification
             DataTree<Vector3d> Vector = new DataTree<Vector3d>();
 
             // ═══════════════════════════════════════════════════════
-            // SETUP DIRECTIONS - ĐÚNG Y HỆT SCRIPT GỐC
             // ═══════════════════════════════════════════════════════
 
             Vector3d longDir = LongtitudeLine.TangentAtStart;
@@ -159,13 +151,11 @@ namespace SurfaceClassification
             excludeDir.Unitize();
 
             // ═══════════════════════════════════════════════════════
-            // FIX #1: KIỂM TRA SONG SONG (tránh Zero Vector)
             // ═══════════════════════════════════════════════════════
 
             double parallelCheck = Math.Abs(Vector3d.Multiply(longDir, excludeDir));
             if (parallelCheck > 0.99)
             {
-                // Vectors gần song song → tạo vector vuông góc
                 excludeDir = Vector3d.CrossProduct(longDir, Vector3d.ZAxis);
                 if (excludeDir.Length < 0.001)
                 {
@@ -178,7 +168,6 @@ namespace SurfaceClassification
             double EXCLUDE_THRESHOLD = 0.9;
 
             // ═══════════════════════════════════════════════════════
-            // LOOP QUA BRANCHES - ĐÚNG Y HỆT SCRIPT GỐC
             // ═══════════════════════════════════════════════════════
 
             foreach (GH_Path path in BREP.Paths)
@@ -191,7 +180,6 @@ namespace SurfaceClassification
                     if (brep == null || !brep.IsValid) continue;
 
                     // ═══════════════════════════════════════════════════════
-                    // FILTER SURFACES - ĐÚNG Y HỆT SCRIPT GỐC
                     // ═══════════════════════════════════════════════════════
 
                     List<Surface> validSurfaces = new List<Surface>();
@@ -216,12 +204,11 @@ namespace SurfaceClassification
                     }
 
                     // ═══════════════════════════════════════════════════════
-                    // FIX #3: CHECK COUNT (tránh output trống im lặng)
                     // ═══════════════════════════════════════════════════════
 
                     if (validSurfaces.Count < 2)
                     {
-                        continue;  // Bỏ qua branch này
+                        continue;
                     }
 
                     // ═══════════════════════════════════════════════════════
@@ -232,14 +219,13 @@ namespace SurfaceClassification
 
                     if (result == null)
                     {
-                        continue;  // Không thể classify → bỏ qua
+                        continue;
                     }
 
                     Surface innerSrf = result.Item1;
                     Surface outerSrf = result.Item2;
 
                     // ═══════════════════════════════════════════════════════
-                    // TÍNH VECTOR - ĐÚNG Y HỆT SCRIPT GỐC
                     // ═══════════════════════════════════════════════════════
 
                     Point3d innerCenter = innerSrf.PointAt(
@@ -251,7 +237,6 @@ namespace SurfaceClassification
                     Vector3d perpVector = Vector3d.CrossProduct(longDir, excludeDir);
 
                     // ═══════════════════════════════════════════════════════
-                    // FIX #1: CHECK ZERO VECTOR (tránh NaN)
                     // ═══════════════════════════════════════════════════════
 
                     if (perpVector.Length < 0.001)
@@ -270,7 +255,6 @@ namespace SurfaceClassification
                     }
 
                     // ═══════════════════════════════════════════════════════
-                    // OUTPUT - ĐÚNG Y HỆT SCRIPT GỐC
                     // ═══════════════════════════════════════════════════════
 
                     InnerSurface.Add(innerSrf, path);
@@ -280,7 +264,6 @@ namespace SurfaceClassification
             }
 
             // ═══════════════════════════════════════════════════════
-            // SET OUTPUT - ĐÚNG Y HỆT SCRIPT GỐC
             // ═══════════════════════════════════════════════════════
 
             DA.SetDataTree(0, InnerSurface);
@@ -291,8 +274,6 @@ namespace SurfaceClassification
         #region HELPER METHODS
 
         /// <summary>
-        /// FIX #5: Phân loại Inner/Outer với validation đầy đủ
-        /// Tránh crash khi distances.Count = 0
         /// </summary>
         private Tuple<Surface, Surface, double, double> ClassifyInnerOuterSurfaces(
             List<Surface> surfaces,
@@ -301,7 +282,6 @@ namespace SurfaceClassification
             if (surfaces.Count < 2) return null;
 
             // ═══════════════════════════════════════════════════════
-            // FIX #5: Dùng Dictionary + Try-Catch để handle exceptions
             // ═══════════════════════════════════════════════════════
 
             Dictionary<int, double> validDistances = new Dictionary<int, double>();
@@ -341,20 +321,18 @@ namespace SurfaceClassification
             }
 
             // ═══════════════════════════════════════════════════════
-            // FIX #5: CHECK EMPTY LIST trước khi Min/Max
             // ═══════════════════════════════════════════════════════
 
             if (validDistances.Count == 0)
             {
-                return null;  // Không có surface hợp lệ
+                return null;
             }
 
             if (validDistances.Count < 2)
             {
-                return null;  // Cần ít nhất 2 surfaces
+                return null;
             }
 
-            // Giờ an toàn rồi
             double minDist = validDistances.Values.Min();
             double maxDist = validDistances.Values.Max();
 

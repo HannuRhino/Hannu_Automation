@@ -14,7 +14,6 @@ namespace ExtremeCurveAnalysis
         #region METADATA & CONSTRUCTOR
 
         /// <summary>
-        /// Constructor - Định nghĩa thông tin component trong Grasshopper UI
         /// </summary>
         public ExtremeCurveComponent()
           : base(
@@ -271,7 +270,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// ★ Round all point coordinates to specified decimal places ★
-        /// Làm tròn tất cả tọa độ điểm đến số thập phân chỉ định
         /// 
         /// EXAMPLES:
         /// (1.9999, 1.07888, 1.11888) → (2.0, 1.1, 1.1) with decimals=1
@@ -297,7 +295,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// Explode all curves to line segments
-        /// Nổ tất cả đường cong thành các đoạn thẳng
         /// </summary>
         /// <param name="curves">Input curves to explode</param>
         /// <param name="divisions">Number of divisions for complex curves</param>
@@ -339,7 +336,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// Filter lines perpendicular to specified axis
-        /// Lọc các đường vuông góc với trục chỉ định
         /// </summary>
         /// <param name="lines">Input lines to filter</param>
         /// <param name="axis">Axis to check perpendicularity ('x', 'y', 'z')</param>
@@ -373,7 +369,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// Find min and max coordinate values along axis
-        /// Tìm giá trị tọa độ min và max theo trục
         /// </summary>
         /// <param name="lines">Lines to analyze</param>
         /// <param name="axis">Axis to measure along</param>
@@ -392,7 +387,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// Filter lines at extreme (min/max) positions
-        /// Lọc đường ở vị trí cực trị (min/max)
         /// </summary>
         /// <param name="lines">Lines to filter</param>
         /// <param name="axis">Axis to check</param>
@@ -427,7 +421,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// Extract unique points from lines with tolerance
-        /// Trích xuất các điểm duy nhất từ đường với tolerance
         /// </summary>
         /// <param name="lines">Lines to extract points from</param>
         /// <param name="tolerance">Duplicate point tolerance</param>
@@ -449,7 +442,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// Get coordinate value from point based on axis
-        /// Lấy giá trị tọa độ từ điểm theo trục
         /// </summary>
         /// <param name="pt">Point to get coordinate from</param>
         /// <param name="axis">Axis ('x', 'y', 'z')</param>
@@ -466,7 +458,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// Get vector component along axis
-        /// Lấy thành phần vector theo trục
         /// </summary>
         /// <param name="v">Vector to get component from</param>
         /// <param name="axis">Axis ('x', 'y', 'z')</param>
@@ -483,7 +474,6 @@ namespace ExtremeCurveAnalysis
 
         /// <summary>
         /// Check if list contains point within tolerance
-        /// Kiểm tra list có chứa điểm với tolerance
         /// </summary>
         /// <param name="list">List of points to check</param>
         /// <param name="pt">Point to find</param>
