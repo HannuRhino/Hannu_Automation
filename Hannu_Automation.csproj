@@ -11,6 +11,8 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <TargetExt>.gha</TargetExt>
     <NoWarn>NU1701</NoWarn>
+    <AssemblyName>Hannu_Automation</AssemblyName>
+    <RootNamespace>GroupPoint_XY</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
